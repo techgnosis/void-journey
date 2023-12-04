@@ -1,0 +1,1 @@
+I had to install `freefont-ttf` to get swaybar to show text and not squares
