@@ -36,6 +36,7 @@ Some things that make dbus stand out
 ---------
 Single owner "bus names". 
 On-demand starting of services (service files), like starting pipewire automatically. This seems to be a big part of dbus. I'm curious how this holds up against a systemd world.
+bus activation seems like a useful feature for void linux since it does not use systemd
 
 dbus messages have a type, and types are made of a collection of primitive types, each with 1 letter identifiers
 
