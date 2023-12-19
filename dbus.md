@@ -16,6 +16,8 @@ so its easiest to do
 
 If you export variables from a bash script, you can capture them by running `source thescript`
 
+You can put a file with `export` statements into `/etc/profile.d/` and it will get picked up for every login. This is a good way to share `DBUS_SESSION_BUS_ADDRESS` across logins.
+
 
 I don't seem to need a system bus to run sway.
 
@@ -26,10 +28,9 @@ there is a lot of policy defined for the system bus that dictates what bus apps 
 
 https://stackoverflow.com/questions/41242460/how-to-export-dbus-session-bus-address
 
-gdbus
+
 dbus-send - part of dbus
 dbus-monitor - part of dbus
-busctl
 pacman -S dbus-python
 
 Some things that make dbus stand out
@@ -60,4 +61,40 @@ clients sign up for signals with "match rules"
 clients can sign up for copies of method messages using match rules
 
 each message has a header and a body
+
+List bus clients (aka bus names)
+```
+dbus-send \
+--session \
+--type method_call \
+--print-reply \
+--dest=org.freedesktop.DBus \
+/org/freedesktop/DBus \
+org.freedesktop.DBus.ListNames
+```
+The response includes dbus-send itself as a bus name, which makes sense because it is one while the reply is being generated from ListNames
+
+pipewire does not appear to request any well known names which is weird
+
+All objects implement org.freedesktop.DBus.Introspectable interface
+```
+ dbus-send \
+ --session \
+ --type=method_call \
+ --print-reply \
+--dest=org.asamk.Signal \
+/org/asamk/Signal \
+org.freedesktop.DBus.Introspectable.Introspect
+```
+
+```
+dbus-send \
+--session \
+--type=method_call \
+--print-reply \
+--dest=org.freedesktop.DBus \
+/org/freedesktop/DBus \
+org.freedesktop.DBus.GetConnectionUnixProcessID \
+string:org.freedesktop.Notifications
+```
 
